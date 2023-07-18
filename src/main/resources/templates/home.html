@@ -3,8 +3,18 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/app-layout}">
 <head>
+    <script th:src="@{/static/js/home.js}" type="text/javascript"></script>
     <title>Home</title>
+    <script>
+        let stories = []
+        $(document).ready(function() {
+            $.get("/get-all", function(data, status){
+                stories = data;
+            });
+        });
+    </script>
 </head>
+
 <body>
 
 <div layout:fragment="content">

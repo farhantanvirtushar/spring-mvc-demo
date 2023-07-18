@@ -1,0 +1,2 @@
+ALTER TABLE stories
+ADD COLUMN title VARCHAR(255) NOT NULL DEFAULT 'Untitled';

@@ -18,6 +18,9 @@ public class Story {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "TITLE")
+    private String title;
+
     @Column(name = "STORY")
     private String story;
 
