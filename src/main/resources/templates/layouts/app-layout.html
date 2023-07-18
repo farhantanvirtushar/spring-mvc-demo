@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Story Time</title>
+
+    <link th:href="@{/static/bootstrap/css/bootstrap.css}" rel="stylesheet" >
+    <link th:href="@{/static/css/global.css}" rel="stylesheet" >
+    <script th:src="@{/static/bootstrap/js/bootstrap.bundle.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/jquery-3.7.0.min.js}" type="text/javascript"></script>
+</head>
+
+<script>
+    $( document ).ready(function() {
+        let urlPath = window.location.pathname;
+        console.log(urlPath);
+        if(urlPath === "/"){
+            $("#home").addClass("active")
+        }else if(urlPath.startsWith("/contact")){
+            $("#contact").addClass("active")
+        }
+        if(urlPath.startsWith("/about")){
+            $("#about").addClass("active")
+        }
+    });
+</script>
+
+<body>
+
+<!-- Main Navigation -->
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Story Time</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarContent" aria-controls="navbar"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="navbarContent">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Story Time</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" >
+                    <li class="nav-item">
+                        <a class="nav-link" id="home" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact" th:href="@{/contact}">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="about" th:href="@{/about}">About Us</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</nav>
+
+<!-- Content Section -->
+<section layout:fragment="content">
+    <p>This is filled by the content template.</p>
+</section>
+
+<!-- Footer -->
+<footer class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <p class="text-muted">&copy; Story Time. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Optional Section -->
+<th:block layout:fragment="optional" />
+
+</body>
+</html>
