@@ -10,6 +10,7 @@
     <link th:href="@{/static/css/global.css}" rel="stylesheet" >
     <script th:src="@{/static/bootstrap/js/bootstrap.bundle.js}" type="text/javascript"></script>
     <script th:src="@{/static/js/jquery-3.7.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/vue3.global.js}" type="text/javascript"></script>
 </head>
 
 <script>
@@ -29,7 +30,7 @@
 <body>
 
 <!-- Main Navigation -->
-<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md sticky-top navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/}">Story Time</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarContent" aria-controls="navbar"
