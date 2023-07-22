@@ -14,6 +14,21 @@
         // });
     </script>
 
+    <style>
+        .avatar{
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            border: #0a3622 3px solid;
+            background-color: #458d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -32,12 +47,16 @@
 
                 <div v-for="story in storyList" class="card mb-5" style="width: 100%;">
                     <div class="card-body">
-                        <div class="row" id="card-header">
-                            <div class="col2">
-
+                        <div class="row mb-3" id="card-header">
+                            <div class="col-1">
+                                <div class="avatar" >
+                                    {{story.firstName.charAt(0).toUpperCase() +''+story.lastName.charAt(0).toUpperCase()}}
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <b>{{story.firstName +' '+ story.lastName}}</b>
+                            <div class="col-8">
+                                <div class="row"><b>{{story.firstName +' '+ story.lastName}}</b></div>
+                                <div class="row text-muted ps-2">{{new Date(story.createdAt).toDateString()+', '+ new Date(story.createdAt).toLocaleTimeString()}}</div>
+
                             </div>
                         </div>
                         <h2 class="card-title">{{story.title}}</h2>
@@ -74,6 +93,7 @@
                             })
                         })
                 },
+
             },
             created() {
                 this.getStories();

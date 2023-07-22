@@ -4,3 +4,8 @@
     align-items: center;
     margin-top: 100px;
 }
+
+.vertical-centered {
+    display: flex;
+    align-items: center;
+}
