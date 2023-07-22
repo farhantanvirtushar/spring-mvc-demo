@@ -1,6 +1,7 @@
 package com.example.springmvcdemo.controllers;
 
 import com.example.springmvcdemo.model.Story;
+import com.example.springmvcdemo.model.StoryWithUserDetail;
 import com.example.springmvcdemo.model.User;
 import com.example.springmvcdemo.services.StoryService;
 import com.example.springmvcdemo.services.UserService;
@@ -38,6 +39,22 @@ public class StoryController {
 
         try {
             List<Story> storyList = storyService.getAllStories();
+
+            return storyList;
+
+        } catch (Exception e){
+
+            return new ArrayList<>();
+        }
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/get-all-with-user-detail",method = RequestMethod.GET)
+    public List<StoryWithUserDetail> getAllStoriesWithUserDetail(HttpServletRequest request, HttpServletResponse response){
+
+        try {
+            List<StoryWithUserDetail> storyList = storyService.getAllStoriesWithUserDetail();
 
             return storyList;
 

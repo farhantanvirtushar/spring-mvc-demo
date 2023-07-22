@@ -1,6 +1,7 @@
 package com.example.springmvcdemo.services;
 
 import com.example.springmvcdemo.model.Story;
+import com.example.springmvcdemo.model.StoryWithUserDetail;
 import com.example.springmvcdemo.repositories.StoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,11 @@ public class StoryService {
 
     public List<Story> getAllStories(){
         List<Story> storyList = storyRepository.findAll();
+        return storyList;
+    }
+
+    public List<StoryWithUserDetail> getAllStoriesWithUserDetail(){
+        List<StoryWithUserDetail> storyList = storyRepository.findAllWithUserDetail();
         return storyList;
     }
 }

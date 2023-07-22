@@ -1,6 +1,7 @@
 package com.example.springmvcdemo.repositories;
 
 import com.example.springmvcdemo.model.Story;
+import com.example.springmvcdemo.model.StoryWithUserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +13,8 @@ public interface StoryRepository extends JpaRepository<Story,Long> {
 
     @Query("SELECT s FROM Story s WHERE s.userId = :userId")
     List<Story> findAllByUser(@Param("userId") Long userId);
+
+    @Query("SELECT new com.example.springmvcdemo.model.StoryWithUserDetail(s,u.firstName,u.lastName)" +
+            " FROM Story s join User u on s.userId = u.id")
+    List<StoryWithUserDetail> findAllWithUserDetail();
 }

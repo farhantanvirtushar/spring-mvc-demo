@@ -37,7 +37,7 @@
 
                             </div>
                             <div class="col-4">
-                                <b>{{story}}</b>
+                                <b>{{story.firstName +' '+ story.lastName}}</b>
                             </div>
                         </div>
                         <h2 class="card-title">{{story.title}}</h2>
@@ -64,7 +64,7 @@
             },
             methods : {
                 getStories: function () {
-                    fetch("/get-all")
+                    fetch("/get-all-with-user-detail")
                         .then((response) => response.json())
                         .then((data) => {
                             this.storyList = data;
