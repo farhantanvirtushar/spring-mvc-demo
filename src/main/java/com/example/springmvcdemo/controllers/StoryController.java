@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/story")
 public class StoryController {
 
     private final UserService userService;
@@ -83,6 +83,8 @@ public class StoryController {
             if(user == null){
                 return "redirect:/login";
             }
+            System.out.println("user name : "+user.getFirstName() +" "+user.getLastName());
+            System.out.println(story);
             Long userId = user.getId();
 
             story.setUserId(userId);
@@ -96,6 +98,7 @@ public class StoryController {
             return "redirect:/";
 
         } catch (Exception e){
+            e.printStackTrace();
             return "redirect:/create-story";
         }
 

@@ -13,7 +13,7 @@ public class StoryWithUserDetail extends Story {
     private String lastName;
 
     public StoryWithUserDetail(Story story, String firstName, String lastName){
-        super(story.getId(),story.getTitle(),story.getStory(),story.getCreatedAt(),story.getUserId());
+        super(story.getId(),story.getTitle(),story.getStoryText(),story.getCreatedAt(),story.getUserId());
         this.firstName = firstName;
         this.lastName = lastName;
 

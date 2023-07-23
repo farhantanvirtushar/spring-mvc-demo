@@ -22,7 +22,7 @@ public class Story {
     private String title;
 
     @Column(name = "STORY")
-    private String story;
+    private String storyText;
 
     @Column(name = "CREATED_AT")
     private Timestamp createdAt;

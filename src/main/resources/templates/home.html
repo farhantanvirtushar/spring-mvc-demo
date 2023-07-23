@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <h2 class="card-title">{{story.title}}</h2>
-                        <p class="card-text">{{story.story}}</p>
+                        <p class="card-text">{{story.storyText}}</p>
                         <a href="#" class="btn btn-primary">Read More</a>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
             },
             methods : {
                 getStories: function () {
-                    fetch("/get-all-with-user-detail")
+                    fetch("/story/get-all-with-user-detail")
                         .then((response) => response.json())
                         .then((data) => {
                             this.storyList = data;
