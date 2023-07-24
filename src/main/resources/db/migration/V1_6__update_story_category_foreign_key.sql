@@ -1,0 +1,4 @@
+BEGIN;
+ALTER TABLE story_category DROP CONSTRAINT fk_story;
+ALTER TABLE story_category ADD CONSTRAINT fk_story FOREIGN KEY (story_id) REFERENCES stories (id) ON DELETE CASCADE;
+COMMIT;

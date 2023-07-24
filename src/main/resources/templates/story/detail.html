@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/app-layout}">
+<head>
+    <script th:src="@{/static/js/home.js}" type="text/javascript"></script>
+    <title>Write Story</title>
+</head>
+
+<script>
+    // $(document).ready(function() {
+
+    // });
+</script>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="container mt-5" >
+        <h1 class="mb-5" th:text="${story.title}"></h1>
+        <p th:text="${story.storyText}"></p>
+    </div>
+
+</div>
+
+</body>
+</html>

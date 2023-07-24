@@ -130,7 +130,7 @@ public class StoryController {
     }
 
     
-    @RequestMapping(value = "/get-by-id/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/detail/{id}",method = RequestMethod.GET)
     public String  getStoryById(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long id, Model model){
 
         try {
@@ -144,7 +144,7 @@ public class StoryController {
             model.addAttribute("errorMessage",e.getMessage());
         }
 
-        return "story/get-by-id";
+        return "story/detail";
 
     }
 
