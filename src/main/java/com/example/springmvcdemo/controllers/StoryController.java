@@ -1,8 +1,9 @@
 package com.example.springmvcdemo.controllers;
 
-import com.example.springmvcdemo.model.Story;
-import com.example.springmvcdemo.model.StoryWithUserDetail;
-import com.example.springmvcdemo.model.User;
+import com.example.springmvcdemo.model.*;
+import com.example.springmvcdemo.model.request.StoryCreateReq;
+import com.example.springmvcdemo.services.CategoryService;
+import com.example.springmvcdemo.services.StoryCategoryService;
 import com.example.springmvcdemo.services.StoryService;
 import com.example.springmvcdemo.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,9 +24,15 @@ public class StoryController {
     private final UserService userService;
     private final StoryService storyService;
 
-    public StoryController(UserService userService, StoryService storyService) {
+    private final CategoryService categoryService;
+
+    private final StoryCategoryService storyCategoryService;
+
+    public StoryController(UserService userService, StoryService storyService, CategoryService categoryService, StoryCategoryService storyCategoryService) {
         this.userService = userService;
         this.storyService = storyService;
+        this.categoryService = categoryService;
+        this.storyCategoryService = storyCategoryService;
     }
 
 //    @RequestMapping(value = "/get-all",method = RequestMethod.GET)
@@ -68,14 +75,17 @@ public class StoryController {
     @RequestMapping(value = "/create-story",method = RequestMethod.GET)
     public String createStoryView(HttpServletRequest request, HttpServletResponse response, Model model){
 
-        Story story = new Story();
-        model.addAttribute("story",story);
+        StoryCreateReq storyCreateReq = new StoryCreateReq();
+        model.addAttribute("story",storyCreateReq);
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList",categoryList);
 
         return "story/create";
 
     }
     @RequestMapping(value = "/create-story",method = RequestMethod.POST)
-    public String createStory(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("story") Story story){
+    public String createStory(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("story") StoryCreateReq storyCreateReq){
 
         try {
             String userEmail = request.getUserPrincipal().getName();
@@ -84,7 +94,10 @@ public class StoryController {
                 return "redirect:/login";
             }
             System.out.println("user name : "+user.getFirstName() +" "+user.getLastName());
-            System.out.println(story);
+            Story story = new Story();
+            story.setTitle(storyCreateReq.getTitle());
+            story.setStoryText(storyCreateReq.getStoryText());
+
             Long userId = user.getId();
 
             story.setUserId(userId);
@@ -94,6 +107,18 @@ public class StoryController {
             story.setCreatedAt(currentTimeStamp);
 
             Story newStory = storyService.createStory(story);
+
+            System.out.println(storyCreateReq.getCategoryIds());
+
+            List< StoryCategory> storyCategoryList = new ArrayList<>();
+            storyCreateReq.getCategoryIds().forEach(categoryId ->{
+                StoryCategory storyCategory = new StoryCategory();
+                storyCategory.setCategoryId(categoryId);
+                storyCategory.setStoryId(newStory.getId());
+                storyCategoryList.add(storyCategory);
+            });
+
+            storyCategoryService.saveAll(storyCategoryList);
 
             return "redirect:/";
 
