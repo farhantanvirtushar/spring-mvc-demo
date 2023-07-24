@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <h2 class="card-title">{{story.title}}</h2>
-                        <p class="card-text">{{story.storyText}}</p>
+                        <p class="card-text">{{story.storyText.substring(0,300) }} {{ story.storyText.length > 300 ?'...':''}}</p>
                         <a :href="'/story/detail/'+ story.id" class="btn btn-primary">Read More</a>
                     </div>
                 </div>
