@@ -19,6 +19,14 @@
     <div class="container mt-5" >
         <h1 class="mb-5" th:text="${story.title}"></h1>
         <p th:text="${story.storyText}"></p>
+
+        <div class="row">
+            <th:block th:each="category : ${categoryList}">
+                <div class="col-1"><h5 ><span class="badge bg-danger" th:text="${category.name}"></span></h5></div>
+            </th:block>
+        </div>
+
+
     </div>
 
 </div>

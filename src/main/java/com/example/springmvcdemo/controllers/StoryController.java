@@ -8,6 +8,8 @@ import com.example.springmvcdemo.services.StoryService;
 import com.example.springmvcdemo.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/story")
@@ -138,6 +141,14 @@ public class StoryController {
             model.addAttribute("story",story);
             if(story == null){
                 model.addAttribute("errorMessage","No Story is found");
+            }else {
+                List<StoryCategory> storyCategoryList = storyCategoryService.getByStoryId(story.getId());
+                List<Long> categoryIds = storyCategoryList.stream().map(StoryCategory::getCategoryId).toList();
+                List<Category> categoryList = categoryService.getAllCategories();
+
+                categoryList = categoryList.stream().filter(category -> categoryIds.contains(category.getCategoryId())).toList();
+
+                model.addAttribute("categoryList",categoryList);
             }
 
         } catch (Exception e){
@@ -161,5 +172,10 @@ public class StoryController {
             return new ArrayList<>();
         }
 
+    }
+
+    @CacheEvict(value = "categories" , allEntries = true)
+    @Scheduled(fixedRateString = "${caching.spring.categories}")
+    public void clearCategoriesCache(){
     }
 }

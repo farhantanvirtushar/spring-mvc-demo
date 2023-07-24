@@ -19,4 +19,8 @@ public class StoryCategoryService {
         List<StoryCategory> createdStoryCategoryList = storyCategoryRepository.saveAll(storyCategoryList);
         storyCategoryRepository.flush();
     }
+
+    public List<StoryCategory> getByStoryId(Long storyId){
+        return storyCategoryRepository.findByStoryId(storyId);
+    }
 }
