@@ -174,8 +174,8 @@ public class StoryController {
 
     }
 
-    @CacheEvict(value = "categories" , allEntries = true)
-    @Scheduled(fixedRateString = "${caching.spring.categories}")
-    public void clearCategoriesCache(){
-    }
+//    @CacheEvict(value = "categories" , allEntries = true)
+//    @Scheduled(fixedRateString = "${caching.spring.categories}")
+//    public void clearCategoriesCache(){
+//    }
 }
