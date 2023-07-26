@@ -8,10 +8,13 @@ import com.example.springmvcdemo.services.StoryService;
 import com.example.springmvcdemo.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -88,7 +91,18 @@ public class StoryController {
 
     }
     @RequestMapping(value = "/create-story",method = RequestMethod.POST)
-    public String createStory(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("story") StoryCreateReq storyCreateReq){
+    public String createStory(HttpServletRequest request, HttpServletResponse response,
+                              @Valid @ModelAttribute("story") StoryCreateReq storyCreateReq,
+                              BindingResult bindingResult, Model model){
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("story",storyCreateReq);
+            model.addAttribute("categoryList",categoryService.getAllCategories());
+            model.addAttribute("hasErrors",true);
+            System.out.println("error found : "+bindingResult.getAllErrors());
+            return "story/create";
+        }
 
         try {
             String userEmail = request.getUserPrincipal().getName();
@@ -127,7 +141,7 @@ public class StoryController {
 
         } catch (Exception e){
             e.printStackTrace();
-            return "redirect:/create-story";
+            return "story/create";
         }
 
     }
@@ -173,9 +187,4 @@ public class StoryController {
         }
 
     }
-
-//    @CacheEvict(value = "categories" , allEntries = true)
-//    @Scheduled(fixedRateString = "${caching.spring.categories}")
-//    public void clearCategoriesCache(){
-//    }
 }
