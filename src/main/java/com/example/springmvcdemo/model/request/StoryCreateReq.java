@@ -12,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 public class StoryCreateReq {
 
-    @NotBlank(message = "Please select a title")
-    @Size(min = 6, max = 24, message = "Title must be minimum 6 & maximum 24 chars long")
+    @NotBlank(message = "Title is empty")
+    @Size(min = 6, max = 24, message = "Invalid title length")
     private String title;
-    @NotBlank(message = "Please write something")
+    @NotBlank(message = "Story is empty")
     private String storyText;
-    @NotEmpty(message = "Please select at leas one category")
+    @NotEmpty(message = "No category is selected")
     private List<Long> categoryIds;
 }

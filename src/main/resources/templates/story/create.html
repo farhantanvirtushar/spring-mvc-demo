@@ -10,24 +10,19 @@
 
             /*<![CDATA[*/
 
-            let hasErrors = /*[[${hasErrors}]]*/ false;
-            console.log(hasErrors);
-            if(hasErrors){
-                let form = $("#story-create-form")[0];
-                form.classList.add('was-validated');
-            }
+            let isValidated = /*[[${isValidated}]]*/ false;
+            console.log(isValidated);
 
             /*]]>*/
 
-            if("${hasError}")
             $("#submit-btn").click(function (event){
                 let form = $("#story-create-form")[0];
 
                 if(!form.checkValidity()){
                     event.preventDefault();
                     event.stopPropagation();
+                    form.classList.add('was-validated');
                 }
-                form.classList.add('was-validated');
             })
         });
     </script>
@@ -44,32 +39,32 @@
 
             <div class="form-group mb-3">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" placeholder="Title"  th:field="*{title}" required/>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error From Server</div>
-                <div  th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error From Server</div>
-<!--                <div class="invalid-feedback">-->
-<!--                    Please choose a title-->
-
-<!--                </div>-->
+                <input type="text" class="form-control" th:classappend="${(#fields.hasErrors('title') ? 'is-invalid' : '')}"  id="title" placeholder="Title"  th:field="*{title}" required minlength="6" maxlength="24"/>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                <div class="invalid-feedback">
+                    Title cannot be empty & must be minimum 6 & maximum 24 chars long
+                </div>
             </div>
             <div class="form-group mb-3">
                 <label for="story">Story</label>
-                <textarea rows="20" class="form-control" id="story" placeholder="Write your story" th:field="*{storyText}" required></textarea>
+                <textarea rows="20" class="form-control" th:classappend="${(#fields.hasErrors('storyText') ? 'is-invalid' : '')}" id="story" placeholder="Write your story" th:field="*{storyText}" required></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('storyText')}" th:errors="*{storyText}"></div>
                 <div class="invalid-feedback">
-                    Please write something
+                    Story cannot be empty
                 </div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="category-select">Add One Or More Categories</label>
 
-                <select id="category-select" class="form-select" multiple th:field="*{categoryIds}" required>
+                <select id="category-select" class="form-select" th:classappend="${(#fields.hasErrors('categoryIds') ? 'is-invalid' : '')}" multiple th:field="*{categoryIds}" required>
                     <th:block th:each="category : ${categoryList}">
                         <option th:value="${category.categoryId}" th:text="${category.name}"> </option>
                     </th:block>
                 </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('categoryIds')}" th:errors="*{categoryIds}"></div>
                 <div class="invalid-feedback">
-                    Please select a category
+                    Please select at least one category
                 </div>
             </div>
 

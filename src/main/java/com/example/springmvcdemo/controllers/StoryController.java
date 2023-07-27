@@ -86,7 +86,7 @@ public class StoryController {
 
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList",categoryList);
-
+        model.addAttribute("isValidated",false);
         return "story/create";
 
     }
@@ -99,7 +99,7 @@ public class StoryController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("story",storyCreateReq);
             model.addAttribute("categoryList",categoryService.getAllCategories());
-            model.addAttribute("hasErrors",true);
+            model.addAttribute("isValidated",true);
             System.out.println("error found : "+bindingResult.getAllErrors());
             return "story/create";
         }
