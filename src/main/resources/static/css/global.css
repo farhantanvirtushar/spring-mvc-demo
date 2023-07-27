@@ -22,3 +22,11 @@
     color: #ffffff;
     box-sizing: border-box;
 }
+
+.avatar-navbar{
+    padding: 10px;
+    border-radius: 50%;
+    border: #ffffff 3px solid;
+    background-color: #458d2d;
+    color: #ffffff;
+}
