@@ -9,3 +9,16 @@
     display: flex;
     align-items: center;
 }
+
+.avatar{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: #0a3622 3px solid;
+    background-color: #458d2d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    box-sizing: border-box;
+}
