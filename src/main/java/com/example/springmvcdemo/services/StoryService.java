@@ -39,7 +39,10 @@ public class StoryService {
     }
 
     public List<StoryWithUserDetail> getAllStoriesWithUserDetail(){
-        List<StoryWithUserDetail> storyList = storyRepository.findAllWithUserDetail();
+//        List<StoryWithUserDetail> storyList = storyRepository.findAllWithUserDetail();
+
+//        Result from native query
+        List<StoryWithUserDetail> storyList = storyRepository.findAllWithUserInfo();
         return storyList;
     }
 }
