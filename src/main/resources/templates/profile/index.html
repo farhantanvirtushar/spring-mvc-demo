@@ -5,7 +5,7 @@
 <head>
     <link th:href="@{/static/css/home.css}" rel="stylesheet" >
     <script th:src="@{/static/js/home.js}" type="text/javascript"></script>
-    <title>Home</title>
+    <title th:text="${user.firstName +' '+ user.lastName}"></title>
 </head>
 
 <body>
@@ -15,25 +15,25 @@
     <div class="container-fluid" id="app">
         <div class="row">
 
-<!--            Left Section           -->
+            <!--            Left Section           -->
             <div class="col-md-3 col-12 d-md-block d-none">left</div>
 
-<!--            Middle Section        -->
+            <!--            Middle Section        -->
             <div class="col-md-6 col-12">
-                <h1 class="mb-5">Recommended For You</h1>
+                <h1 class="mb-5" th:text="${user.firstName +' '+ user.lastName}"></h1>
 
                 <div v-for="story in storyList" class="card mb-5" style="width: 100%;">
                     <div class="card-body">
                         <div class="row mb-3" id="card-header">
                             <div class="col-2 col-lg-1">
-                                <div class="avatar" >
-                                    {{story.firstName.charAt(0).toUpperCase() +''+story.lastName.charAt(0).toUpperCase()}}
+                                <div class="avatar"
+                                     th:text="${ user.firstName.toUpperCase().charAt(0)} + ${ user.lastName.toUpperCase().charAt(0) }">
                                 </div>
                             </div>
                             <div class="col-8">
                                 <div class="row">
                                     <a :href="'/profile/'+ story.userId" class="text-decoration-none text-black ">
-                                        <b>{{story.firstName +' '+ story.lastName}}</b>
+                                        <b th:text="${user.firstName +' '+ user.lastName}"></b>
                                     </a>
                                 </div>
                                 <div class="row text-muted ps-2">{{new Date(story.createdAt).toDateString()+', '+ new Date(story.createdAt).toLocaleTimeString()}}</div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-<!--            Right Section          -->
+            <!--            Right Section          -->
             <div class="col-md-3 col-12 d-md-block d-none">right</div>
         </div>
     </div>
@@ -64,7 +64,7 @@
             },
             methods : {
                 getStories: function () {
-                    fetch("/story/get-all-with-user-detail")
+                    fetch("/profile/get-all-stories/"+"[[${user.id}]]")
                         .then((response) => response.json())
                         .then((data) => {
                             this.storyList = data;
