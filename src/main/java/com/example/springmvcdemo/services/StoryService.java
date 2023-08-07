@@ -24,8 +24,10 @@ public class StoryService {
     }
 
     public Story getStoryById(Long id){
-        Optional<Story> optionalStory = storyRepository.findById(id);
-        return optionalStory.orElse(null);
+//        Optional<Story> optionalStory = storyRepository.findById(id);
+//        return optionalStory.orElse(null);
+
+        return storyRepository.findStoryById(id);
     }
 
     public List<Story> getAllStoriesByUser(Long userId){

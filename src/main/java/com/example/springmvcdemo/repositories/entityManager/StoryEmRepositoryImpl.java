@@ -1,5 +1,6 @@
 package com.example.springmvcdemo.repositories.entityManager;
 
+import com.example.springmvcdemo.model.Story;
 import com.example.springmvcdemo.model.StoryWithUserDetail;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -46,5 +47,18 @@ public class StoryEmRepositoryImpl implements StoryEmRepository{
             return storyWithUserDetailList;
         }
 
+    }
+
+    @Override
+    public Story findStoryById(Long storyId) {
+        try {
+            Story story = (Story) entityManager.createNativeQuery("SELECT *  FROM stories WHERE ID =:storyId", Story.class)
+                    .setParameter("storyId",storyId)
+                    .getSingleResult();
+            return story;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
