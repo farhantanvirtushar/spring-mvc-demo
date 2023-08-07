@@ -20,6 +20,10 @@ public class StoryCategoryService {
         storyCategoryRepository.flush();
     }
 
+    public void deleteAll(List<Long> idList){
+        storyCategoryRepository.deleteAllById(idList);
+        storyCategoryRepository.flush();
+    }
     public List<StoryCategory> getByStoryId(Long storyId){
         return storyCategoryRepository.findByStoryId(storyId);
     }

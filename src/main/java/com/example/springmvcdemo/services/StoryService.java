@@ -23,6 +23,11 @@ public class StoryService {
         return newStory;
     }
 
+    public Story updateStory(Story story){
+        Story updatedStory = storyRepository.save(story);
+        storyRepository.flush();
+        return updatedStory;
+    }
     public Story getStoryById(Long id){
 //        Optional<Story> optionalStory = storyRepository.findById(id);
 //        return optionalStory.orElse(null);

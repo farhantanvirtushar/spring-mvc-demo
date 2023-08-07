@@ -2,6 +2,7 @@ package com.example.springmvcdemo.controllers;
 
 import com.example.springmvcdemo.model.*;
 import com.example.springmvcdemo.model.request.StoryCreateReq;
+import com.example.springmvcdemo.model.request.StoryEditReq;
 import com.example.springmvcdemo.services.CategoryService;
 import com.example.springmvcdemo.services.StoryCategoryService;
 import com.example.springmvcdemo.services.StoryService;
@@ -18,10 +19,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.example.springmvcdemo.utils.Utils.USER_ID;
 
 @Controller
 @RequestMapping("/story")
@@ -146,6 +147,118 @@ public class StoryController {
 
     }
 
+    @RequestMapping(value = "/edit/{storyId}",method = RequestMethod.GET)
+    public String editStoryView(HttpServletRequest request, HttpServletResponse response,
+                                @PathVariable("storyId") Long storyId, Model model){
+
+        Story story = storyService.getStoryById(storyId);
+        if(story == null){
+            model.addAttribute("errorMessage","Story doesn't exist");
+            return "redirect:/";
+        }
+
+        StoryEditReq storyEditReq = new StoryEditReq();
+        storyEditReq.setStoryId(story.getId());
+        storyEditReq.setTitle(story.getTitle());
+        storyEditReq.setStoryText(story.getStoryText());
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        List<Long> storyCategoryIds = storyCategoryService.getByStoryId(storyId).stream().map(StoryCategory::getCategoryId).toList();
+        storyEditReq.setCategoryIds(storyCategoryIds);
+
+        model.addAttribute("story",storyEditReq);
+        model.addAttribute("categoryList",categoryList);
+        model.addAttribute("isValidated",false);
+        return "story/edit";
+
+    }
+    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    public String editStory(HttpServletRequest request, HttpServletResponse response,
+                              @Valid @ModelAttribute("story") StoryEditReq storyEditReq,
+                              BindingResult bindingResult, Model model){
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("story",storyEditReq);
+            model.addAttribute("categoryList",categoryService.getAllCategories());
+            model.addAttribute("isValidated",true);
+            System.out.println("error found : "+bindingResult.getAllErrors());
+            return "story/edit";
+        }
+
+        try {
+
+
+            Long userId = (Long) request.getSession().getAttribute(USER_ID);
+            if(userId == null){
+                return "redirect:/login";
+            }
+
+            Story story = storyService.getStoryById(storyEditReq.getStoryId());
+            if(story == null){
+                return "redirect:/";
+            }
+
+            if(!Objects.equals(story.getUserId(), userId)){
+                model.addAttribute("errorMessage","Unauthorized request");
+                return "redirect:/";
+            }
+            story.setTitle(storyEditReq.getTitle());
+            story.setStoryText(storyEditReq.getStoryText());
+
+
+            Story updateStory = storyService.updateStory(story);
+
+
+            List<StoryCategory> savedCategoryList = storyCategoryService.getByStoryId(story.getId());
+
+            Map<Long,Boolean> savedCategoriesMap = new HashMap<>();
+
+
+            savedCategoryList.forEach(savedCategory -> {
+                savedCategoriesMap.put(savedCategory.getCategoryId(),Boolean.TRUE);
+            });
+
+
+            Map<Long,Boolean> newCategoriesMap = new HashMap<>();
+
+            storyEditReq.getCategoryIds().forEach(newCategoryId -> {
+                newCategoriesMap.put(newCategoryId,Boolean.TRUE);
+            });
+
+            List<Long> storyCategoryIdsToRemove = savedCategoryList
+                    .stream()
+                    .filter(storyCategory -> !newCategoriesMap.containsKey(storyCategory.getCategoryId()))
+                    .map(StoryCategory::getStoryCategoryId)
+                    .toList();
+
+            storyCategoryService.deleteAll(storyCategoryIdsToRemove);
+
+            List<Long> categoryIdsToAdd = storyEditReq.getCategoryIds()
+                    .stream()
+                    .filter(categoryId -> !savedCategoriesMap.containsKey(categoryId))
+                    .toList();
+
+            List<StoryCategory> newStoryCategoryList = new ArrayList<>();
+            categoryIdsToAdd.forEach(categoryId ->{
+                StoryCategory storyCategory = new StoryCategory();
+                storyCategory.setCategoryId(categoryId);
+                storyCategory.setStoryId(story.getId());
+                newStoryCategoryList.add(storyCategory);
+            });
+
+            storyCategoryService.saveAll(newStoryCategoryList);
+
+            model.addAttribute("successMessage","Updated successfully");
+            return "redirect:/";
+
+        } catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("errorMessage",e.getMessage());
+            return "redirect:/";
+        }
+
+    }
     
     @RequestMapping(value = "/detail/{id}",method = RequestMethod.GET)
     public String  getStoryById(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long id, Model model){
