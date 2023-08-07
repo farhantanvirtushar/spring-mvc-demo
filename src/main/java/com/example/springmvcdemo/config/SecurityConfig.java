@@ -1,5 +1,6 @@
 package com.example.springmvcdemo.config;
 
+import com.example.springmvcdemo.config.auth.LoginSuccessHandler;
 import com.example.springmvcdemo.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +17,11 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    private final LoginSuccessHandler loginSuccessHandler;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService, LoginSuccessHandler loginSuccessHandler) {
         this.userDetailsService = userDetailsService;
+        this.loginSuccessHandler = loginSuccessHandler;
     }
 
     @Bean
@@ -29,7 +33,7 @@ public class SecurityConfig {
         http
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/");
+                .successHandler(loginSuccessHandler);
 
         return http.build();
     }

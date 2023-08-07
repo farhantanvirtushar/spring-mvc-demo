@@ -33,25 +33,6 @@ public class ProfileController {
 
     private final StoryCategoryService storyCategoryService;
 
-    @RequestMapping(value = "",method = RequestMethod.GET)
-    public String  index(HttpServletRequest request, HttpServletResponse response, Model model){
-
-        try {
-            String userEmail = request.getUserPrincipal().getName();
-            User user = userService.getUserByEmail(userEmail);
-            if(user == null){
-                model.addAttribute("errorMessage","User not found");
-                return "redirect:/";
-            }
-            model.addAttribute("user",user);
-
-        } catch (Exception e){
-            model.addAttribute("errorMessage",e.getMessage());
-        }
-
-        return "profile/index";
-
-    }
 
     @RequestMapping(value = "/{userId}",method = RequestMethod.GET)
     public String  profile(HttpServletRequest request, HttpServletResponse response, @PathVariable("userId") Long userId, Model model){
@@ -62,6 +43,7 @@ public class ProfileController {
                 model.addAttribute("errorMessage","User not found");
                 return "redirect:/";
             }
+            user.setPassword("");
             model.addAttribute("user",user);
 
         } catch (Exception e){
