@@ -52,4 +52,9 @@ public class StoryService {
         List<StoryWithUserDetail> storyList = storyRepository.findAllWithUserInfo();
         return storyList;
     }
+
+    public void deleteStory(Long storyId){
+        storyRepository.deleteById(storyId);
+        storyRepository.flush();
+    }
 }

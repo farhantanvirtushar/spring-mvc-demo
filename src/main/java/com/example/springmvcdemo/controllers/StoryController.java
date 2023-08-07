@@ -260,7 +260,7 @@ public class StoryController {
 
         } catch (Exception e){
             e.printStackTrace();
-            model.addAttribute("errorMessage",e.getMessage());
+            model.addAttribute("errorMessage","Service Error");
             return "redirect:/";
         }
 
@@ -285,7 +285,7 @@ public class StoryController {
             }
 
         } catch (Exception e){
-            model.addAttribute("errorMessage",e.getMessage());
+            model.addAttribute("errorMessage","Service Error");
         }
 
         return "story/detail";
@@ -304,6 +304,34 @@ public class StoryController {
         } catch (Exception e){
             return new ArrayList<>();
         }
+
+    }
+
+    @RequestMapping(value = "/delete/{storyId}",method = RequestMethod.GET)
+    public String deleteStory(HttpServletRequest request, HttpServletResponse response,
+                                @PathVariable("storyId") Long storyId, Model model){
+
+        Story story = storyService.getStoryById(storyId);
+        if(story == null){
+            model.addAttribute("errorMessage","Story doesn't exist");
+            return "redirect:/";
+        }
+
+        Long userId = (Long) request.getSession().getAttribute(USER_ID);
+        if(!Objects.equals(story.getUserId(), userId)){
+            model.addAttribute("errorMessage","Unauthorized action");
+            return "redirect:/";
+        }
+
+        try {
+            storyService.deleteStory(storyId);
+        } catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("errorMessage","Service Error");
+            return "redirect:/";
+        }
+        model.addAttribute("successMessage","Deleted successfully");
+        return "redirect:/";
 
     }
 }
