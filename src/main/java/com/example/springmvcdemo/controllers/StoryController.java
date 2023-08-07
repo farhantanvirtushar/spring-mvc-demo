@@ -157,6 +157,12 @@ public class StoryController {
             return "redirect:/";
         }
 
+        Long userId = (Long) request.getSession().getAttribute(USER_ID);
+        if(!Objects.equals(story.getUserId(), userId)){
+            model.addAttribute("errorMessage","Unauthorized action");
+            return "redirect:/";
+        }
+
         StoryEditReq storyEditReq = new StoryEditReq();
         storyEditReq.setStoryId(story.getId());
         storyEditReq.setTitle(story.getTitle());

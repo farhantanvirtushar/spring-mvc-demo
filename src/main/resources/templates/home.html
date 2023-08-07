@@ -30,7 +30,7 @@
                                     {{story.firstName.charAt(0).toUpperCase() +''+story.lastName.charAt(0).toUpperCase()}}
                                 </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-8 col-lg-10">
                                 <div class="row">
                                     <a :href="'/profile/'+ story.userId" class="text-decoration-none text-black ">
                                         <b>{{story.firstName +' '+ story.lastName}}</b>
@@ -38,6 +38,17 @@
                                 </div>
                                 <div class="row text-muted ps-2">{{new Date(story.createdAt).toDateString()+', '+ new Date(story.createdAt).toLocaleTimeString()}}</div>
 
+                            </div>
+                            <div class="col-2 col-lg-1">
+                                <div v-if="story.userId == loggedInUserId" class="dropdown">
+                                    <button class="btn" type="button" id="storyDropdownMenuButton" data-bs-toggle="dropdown"  aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="storyDropdownMenuButton">
+                                        <li><a class="dropdown-item" :href="'/story/edit/' + story.id"><i class="bi bi-pencil-square"></i> Edit</a></li>
+                                        <li><a class="dropdown-item" :href="'/story/delete/' + story.id"><i class="bi bi-trash"></i> Delete</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <h2 class="card-title">{{story.title}}</h2>
@@ -59,6 +70,7 @@
 
             data() {
                 return {
+                    loggedInUserId : "[[${session.USER_ID}]]",
                     storyList : []
                 }
             },
@@ -68,10 +80,6 @@
                         .then((response) => response.json())
                         .then((data) => {
                             this.storyList = data;
-
-                            this.storyList.forEach(function (story, index){
-                                console.log(story.id)
-                            })
                         })
                 },
 
